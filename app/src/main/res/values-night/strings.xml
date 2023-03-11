@@ -1,5 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">NewsAppHilt</string>
     <string name="breaking_news">Breaking News</string>
     <string name="saved_news">Saved News</string>
     <string name="search_news">Search News</string>
