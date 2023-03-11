@@ -1,11 +1,7 @@
 package com.volie.newsapphilt.model
 
 
-import com.google.gson.annotations.SerializedName
-
 data class Source(
-    @SerializedName("id")
-    val id: String?,
-    @SerializedName("name")
-    val name: String
+    val id: String? = "",
+    val name: String?
 )
