@@ -5,17 +5,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
 import com.volie.newsapphilt.databinding.FragmentArticleBinding
+import javax.inject.Inject
 
-class ArticleFragment : Fragment() {
+class ArticleFragment
+@Inject constructor() : Fragment() {
     private var _mBinding: FragmentArticleBinding? = null
     private val mBinding get() = _mBinding!!
+    val args: ArticleFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _mBinding = FragmentArticleBinding.inflate(inflater, container, false)
         return mBinding.root
     }

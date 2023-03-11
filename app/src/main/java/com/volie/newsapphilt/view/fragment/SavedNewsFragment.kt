@@ -8,8 +8,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.volie.newsapphilt.databinding.FragmentSavedNewsBinding
 import com.volie.newsapphilt.view.fragment.adapter.NewsAdapter
+import javax.inject.Inject
 
-class SavedNewsFragment : Fragment() {
+class SavedNewsFragment
+@Inject constructor() : Fragment() {
     private var _mBinding: FragmentSavedNewsBinding? = null
     private val mBinding get() = _mBinding!!
     private val mAdapter: NewsAdapter by lazy {
