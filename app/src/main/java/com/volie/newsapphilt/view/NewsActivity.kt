@@ -7,7 +7,9 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.volie.newsapphilt.R
 import com.volie.newsapphilt.databinding.ActivityNewsBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class NewsActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivityNewsBinding
     private lateinit var navController: NavController
