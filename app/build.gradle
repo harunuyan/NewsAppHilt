@@ -90,6 +90,9 @@ dependencies {
 
     // Material Design
     implementation 'com.google.android.material:material:1.8.0'
+
+    // Swipe refresh layout
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 }
 kapt {
     correctErrorTypes true

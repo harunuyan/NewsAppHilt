@@ -43,6 +43,7 @@ class BreakingNewsFragment
         super.onViewCreated(view, savedInstanceState)
         setupAdapter()
         mViewModel.getBreakingNews()
+        pullToRefresh()
         initObserver()
     }
 
@@ -53,10 +54,22 @@ class BreakingNewsFragment
         }
     }
 
+    fun pullToRefresh() {
+        with(mBinding) {
+            swipeRefreshLayout.setOnRefreshListener {
+                rvBreakingNews.visibility = View.GONE
+                paginationProgressBar.visibility = View.VISIBLE
+                swipeRefreshLayout.isRefreshing = false
+                mViewModel.getBreakingNews()
+            }
+        }
+    }
+
     fun initObserver() {
         mViewModel.news.observe(viewLifecycleOwner) {
             when (it.status) {
                 Status.SUCCESS -> {
+                    mBinding.rvBreakingNews.visibility = View.VISIBLE
                     it.data?.let { news ->
                         with(mBinding) {
                             tvError.visibility = View.GONE
