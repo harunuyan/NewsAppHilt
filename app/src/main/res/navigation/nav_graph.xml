@@ -9,7 +9,7 @@
         android:name="com.volie.newsapphilt.view.fragment.BreakingNewsFragment"
         android:label="BreakingNewsFragment">
         <action
-            android:id="@+id/action_breakingNewsFragment2_to_articleFragment"
+            android:id="@+id/action_breakingNewsFragment_to_articleFragment"
             app:destination="@id/articleFragment" />
     </fragment>
     <fragment
@@ -17,7 +17,7 @@
         android:name="com.volie.newsapphilt.view.fragment.SearchNewsFragment"
         android:label="SearchNewsFragment">
         <action
-            android:id="@+id/action_searchNewsFragment2_to_articleFragment"
+            android:id="@+id/action_searchNewsFragment_to_articleFragment"
             app:destination="@id/articleFragment" />
     </fragment>
     <fragment
@@ -25,7 +25,7 @@
         android:name="com.volie.newsapphilt.view.fragment.SavedNewsFragment"
         android:label="SavedNewsFragment">
         <action
-            android:id="@+id/action_savedNewsFragment2_to_articleFragment"
+            android:id="@+id/action_savedNewsFragment_to_articleFragment"
             app:destination="@id/articleFragment" />
     </fragment>
     <fragment
