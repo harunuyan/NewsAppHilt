@@ -8,7 +8,7 @@ import com.volie.newsapphilt.model.Article
 interface ArticleDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun upsert(article: Article): Long
+    suspend fun upsert(article: Article)
 
     @Delete
     suspend fun deleteArticle(article: Article)
