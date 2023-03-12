@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.volie.newsapphilt.api.RetrofitApi
 import com.volie.newsapphilt.database.ArticleDatabase
-import com.volie.newsapphilt.util.constant.BASE_URL
+import com.volie.newsapphilt.util.Constant.BASE_URL
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext

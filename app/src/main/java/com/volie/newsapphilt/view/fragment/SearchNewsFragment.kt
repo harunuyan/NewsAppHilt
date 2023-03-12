@@ -16,7 +16,7 @@ class SearchNewsFragment
     private val mBinding get() = _mBinding!!
     private val mAdapter: NewsAdapter by lazy {
         NewsAdapter {
-            val action = SearchNewsFragmentDirections.actionSearchNewsFragment2ToArticleFragment(it)
+            val action = SearchNewsFragmentDirections.actionSearchNewsFragmentToArticleFragment(it)
             findNavController().navigate(action)
         }
     }
