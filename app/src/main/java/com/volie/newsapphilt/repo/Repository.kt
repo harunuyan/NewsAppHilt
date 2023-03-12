@@ -21,6 +21,10 @@ class Repository
         articleDao.deleteArticle(article)
     }
 
+    fun deleteAllSaved() {
+        articleDao.deleteAllSaved()
+    }
+
     fun getNewsFromLocal() = articleDao.getAllArticles()
 
 

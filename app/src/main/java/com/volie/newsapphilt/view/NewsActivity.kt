@@ -26,4 +26,8 @@ class NewsActivity : AppCompatActivity() {
         navController = navHostFragment.navController
         mBinding.bottomNavigationView.setupWithNavController(navController)
     }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.popBackStack() || super.onSupportNavigateUp()
+    }
 }
