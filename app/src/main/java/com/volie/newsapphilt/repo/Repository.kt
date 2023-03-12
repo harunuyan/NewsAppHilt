@@ -27,6 +27,20 @@ class Repository
 
     fun getNewsFromLocal() = articleDao.getAllArticles()
 
+    suspend fun searchNews(searchQuery: String): Resource<News> {
+        return try {
+            val response = retrofitApi.searchForNews(searchQuery)
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    return@let Resource.success(it)
+                } ?: Resource.error("Search Error!", null)
+            } else {
+                Resource.error("Search Error!", null)
+            }
+        } catch (e: Exception) {
+            Resource.error("No data!", null)
+        }
+    }
 
     suspend fun getBrekingNewsFromRemote(): Resource<News> {
         return try {
