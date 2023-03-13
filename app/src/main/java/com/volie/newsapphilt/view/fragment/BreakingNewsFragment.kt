@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -15,17 +16,15 @@ import com.volie.newsapphilt.util.Status
 import com.volie.newsapphilt.view.fragment.adapter.NewsAdapter
 import com.volie.newsapphilt.viewmodel.BreakingNewsViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
-class BreakingNewsFragment
-@Inject constructor() : Fragment() {
+class BreakingNewsFragment : Fragment() {
     private var _mBinding: FragmentBreakingNewsBinding? = null
     private val mBinding get() = _mBinding!!
     private val mViewModel: BreakingNewsViewModel by viewModels()
     private var pageNumber = 1
-    var page = -1
     var isLoading = false
+    var countryCode = "1"
 
     private val mAdapter: NewsAdapter by lazy {
         NewsAdapter {
@@ -47,9 +46,29 @@ class BreakingNewsFragment
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupAdapter()
-        mViewModel.getBreakingNews(pageNumber)
+        mViewModel.getBreakingNews(1, countryCode)
+        selectedSpinnerItem()
         pullToRefresh()
         initObserver()
+    }
+
+    private fun selectedSpinnerItem() {
+        mBinding.spCountries.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                countryCode =
+                    mViewModel.parseCountry(position.toString())
+                mViewModel.getBreakingNews(pageNumber, countryCode)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                countryCode = mViewModel.parseCountry("0")
+            }
+        }
     }
 
     private fun setupAdapter() {
@@ -71,7 +90,7 @@ class BreakingNewsFragment
             if (!isLoading) {
                 if ((visibleItemCount + pastVisibleItem) >= total) {
                     pageNumber++
-                    mViewModel.getBreakingNews(pageNumber)
+                    mViewModel.getBreakingNews(pageNumber, countryCode)
                 }
             }
             super.onScrolled(recyclerView, dx, dy)
@@ -84,7 +103,7 @@ class BreakingNewsFragment
                 rvBreakingNews.visibility = View.GONE
                 paginationProgressBar.visibility = View.VISIBLE
                 swipeRefreshLayout.isRefreshing = false
-                mViewModel.getBreakingNews(1)
+                mViewModel.getBreakingNews(1, countryCode)
             }
         }
     }
@@ -93,24 +112,34 @@ class BreakingNewsFragment
         mViewModel.news.observe(viewLifecycleOwner) {
             when (it.status) {
                 Status.SUCCESS -> {
-                    mBinding.rvBreakingNews.visibility = View.VISIBLE
                     it.data?.let { news ->
                         with(mBinding) {
                             tvError.visibility = View.GONE
                             paginationProgressBar.visibility = View.GONE
+                            rvBreakingNews.visibility = View.VISIBLE
                         }
-                        mAdapter.differ.submitList(news.articles)
+                        // operator overloading -> +
+                        mAdapter.differ.submitList(mAdapter.differ.currentList + news.articles)
                     }
+                    isLoading = false
                 }
                 Status.ERROR -> {
                     with(mBinding) {
+                        rvBreakingNews.visibility = View.GONE
                         tvError.visibility = View.VISIBLE
                         paginationProgressBar.visibility = View.GONE
                     }
                     Log.e("Error!", "${it.message}")
+                    isLoading = false
                 }
                 Status.LOADING -> {
-                    mBinding.paginationProgressBar.visibility = View.VISIBLE
+                    with(mBinding) {
+                        paginationProgressBar.visibility = View.VISIBLE
+                        tvError.visibility = View.GONE
+                        rvBreakingNews.visibility = View.GONE
+                    }
+
+                    isLoading = true
                 }
             }
         }
