@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.volie.newsapphilt.databinding.FragmentBreakingNewsBinding
 import com.volie.newsapphilt.util.Status
 import com.volie.newsapphilt.view.fragment.adapter.NewsAdapter
@@ -22,6 +23,10 @@ class BreakingNewsFragment
     private var _mBinding: FragmentBreakingNewsBinding? = null
     private val mBinding get() = _mBinding!!
     private val mViewModel: BreakingNewsViewModel by viewModels()
+    private var pageNumber = 1
+    var page = -1
+    var isLoading = false
+
     private val mAdapter: NewsAdapter by lazy {
         NewsAdapter {
             val action =
@@ -42,15 +47,34 @@ class BreakingNewsFragment
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupAdapter()
-        mViewModel.getBreakingNews()
+        mViewModel.getBreakingNews(pageNumber)
         pullToRefresh()
         initObserver()
     }
 
     private fun setupAdapter() {
-        with(mBinding) {
-            rvBreakingNews.adapter = mAdapter
-            rvBreakingNews.layoutManager = LinearLayoutManager(requireContext())
+        with(mBinding.rvBreakingNews) {
+            adapter = mAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+            addOnScrollListener(scrollListener)
+        }
+    }
+
+    var scrollListener = object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+
+            val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+            val visibleItemCount = layoutManager.childCount
+            val pastVisibleItem = layoutManager.findFirstVisibleItemPosition()
+            val total = mAdapter.itemCount
+
+            if (!isLoading) {
+                if ((visibleItemCount + pastVisibleItem) >= total) {
+                    pageNumber++
+                    mViewModel.getBreakingNews(pageNumber)
+                }
+            }
+            super.onScrolled(recyclerView, dx, dy)
         }
     }
 
@@ -60,7 +84,7 @@ class BreakingNewsFragment
                 rvBreakingNews.visibility = View.GONE
                 paginationProgressBar.visibility = View.VISIBLE
                 swipeRefreshLayout.isRefreshing = false
-                mViewModel.getBreakingNews()
+                mViewModel.getBreakingNews(1)
             }
         }
     }
@@ -96,5 +120,4 @@ class BreakingNewsFragment
         super.onDestroy()
         _mBinding = null
     }
-
 }

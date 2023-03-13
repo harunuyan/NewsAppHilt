@@ -20,9 +20,9 @@ class BreakingNewsViewModel
     private val _news = MutableLiveData<Resource<News>>()
     val news: LiveData<Resource<News>> = _news
 
-    fun getBreakingNews() {
+    fun getBreakingNews(pageNumber: Int) {
         viewModelScope.launch {
-            val response = repository.getBrekingNewsFromRemote()
+            val response = repository.getBrekingNewsFromRemote(pageNumber)
             _news.postValue(response)
         }
     }

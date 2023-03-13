@@ -44,12 +44,13 @@ class SearchNewsFragment
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
+        mBinding.tvError.visibility = View.GONE
         mBinding.etSearch.addTextChangedListener {
             it?.let {
                 if (it.toString().isNotEmpty()) {
                     mViewModel.searchNews(it.toString())
                 } else {
-                    mAdapter.differ.submitList(emptyList())
+                    mAdapter.differ.submitList(null)
                 }
             }
         }

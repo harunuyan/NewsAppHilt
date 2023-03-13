@@ -42,9 +42,9 @@ class Repository
         }
     }
 
-    suspend fun getBrekingNewsFromRemote(): Resource<News> {
+    suspend fun getBrekingNewsFromRemote(pageNumber: Int): Resource<News> {
         return try {
-            val response = retrofitApi.getNews()
+            val response = retrofitApi.getNews(pageNumber)
             if (response.isSuccessful) {
                 response.body()?.let {
                     return@let Resource.success(it)

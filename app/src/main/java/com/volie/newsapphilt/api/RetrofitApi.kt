@@ -10,10 +10,10 @@ interface RetrofitApi {
 
     @GET("v2/top-headlines")
     suspend fun getNews(
-        @Query("country")
-        countryCode: String = "us",
         @Query("page")
         pageNumber: Int = 1,
+        @Query("country")
+        countryCode: String = "us",
         @Query("apiKey")
         apiKey: String = API_KEY
     ): Response<News>
